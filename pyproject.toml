@@ -9,7 +9,12 @@ description = "Recebe eventos de assinatura eletronica com HMAC verificado e mov
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-dependencies = ["requests>=2.31", "fastapi>=0.110", "uvicorn>=0.29"]
+dependencies = [
+    "requests>=2.31",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    'tzdata>=2024.1; sys_platform == "win32"',
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff==0.16.5"]

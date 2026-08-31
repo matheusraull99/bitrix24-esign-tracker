@@ -93,6 +93,16 @@ class TransicaoInvalida(ValueError):
     """Evento que não faz sentido a partir do estado atual."""
 
 
+class CorpoInvalido(ValueError):
+    """Corpo do webhook fora do contrato: JSON quebrado ou que não é objeto.
+
+    Herda de `ValueError` de propósito. Para o endpoint, um corpo malformado é
+    uma só categoria — entrada ruim, resposta 4xx — e o handler a trata num
+    único `except ValueError`. Um `TypeError` aqui escaparia desse `except` e
+    viraria 500, transformando cliente mal-educado em erro nosso.
+    """
+
+
 @dataclass(frozen=True)
 class Evento:
     """Um evento já normalizado, independente do provedor."""
@@ -213,9 +223,9 @@ def ler_corpo(corpo: bytes) -> dict[str, Any]:
     try:
         dados = json.loads(corpo)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"corpo nao e JSON valido: {exc}") from exc
+        raise CorpoInvalido(f"corpo nao e JSON valido: {exc}") from exc
     if not isinstance(dados, dict):
-        raise ValueError("corpo do webhook precisa ser um objeto JSON")
+        raise CorpoInvalido("corpo do webhook precisa ser um objeto JSON")
     return dados
 
 

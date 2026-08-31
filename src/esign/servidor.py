@@ -35,6 +35,8 @@ from .eventos import (
     normalizar,
     validar_assinatura,
 )
+from .tempo import agora as tempo_agora
+from .tempo import no_fuso
 
 log = logging.getLogger("esign")
 
@@ -114,7 +116,8 @@ class Rastreador:
         if evento.signatario:
             texto += f" Signatario: {evento.signatario}."
         if evento.quando:
-            texto += f" Em {evento.quando.strftime('%d/%m/%Y %H:%M')}."
+            local = no_fuso(evento.quando)
+            texto += f" Em {local.strftime('%d/%m/%Y %H:%M')}."
         self.bx.call(
             "crm.timeline.comment.add",
             {"fields": {"ENTITY_ID": deal_id, "ENTITY_TYPE": "deal", "COMMENT": texto}},
@@ -196,4 +199,5 @@ def segredo_do_ambiente() -> str:
 
 
 def agora() -> datetime:
-    return datetime.now()
+    """Instante atual no fuso da operacao (ver `esign.tempo`)."""
+    return tempo_agora()
