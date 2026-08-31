@@ -12,7 +12,7 @@ license = { text = "MIT" }
 dependencies = ["requests>=2.31", "fastapi>=0.110", "uvicorn>=0.29"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.6"]
+dev = ["pytest>=8", "ruff==0.16.5"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
